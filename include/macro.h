@@ -4,6 +4,7 @@
 #include <stdint.h> 
 // conmon
 #define word_t  uint8_t
+#define dword_t uint16_t
 #define addr_t  uint16_t
 #define iaddr_t uint8_t
 #define xaddr_t uint16_t

@@ -1,4 +1,12 @@
 #include "../include/memory.h"
+#include <string.h>
+
+void memory_init() {
+  memory.code = (word_t)0;
+  memset(memory.iram, 0, MEM_IRAM_SIZE);
+  memset(memory.xram, 0, MEM_XRAM_SIZE);
+  memset(memory.sfr,  0, MEM_SFR_SIZE);
+}
 
 word_t memory_read(addr_t addr, memory_type_t type) {
   switch (type) {

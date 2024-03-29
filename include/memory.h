@@ -29,6 +29,8 @@ typedef struct _memory_t {
 
 memory_t memory;
 
+void   memory_init();
+
 word_t memory_read(addr_t addr, memory_type_t type);
 void   memory_write(addr_t addr, word_t data, memory_type_t type);
 
