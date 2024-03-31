@@ -6,6 +6,6 @@
 #define HEX_TYPE_DATA 0x00
 #define HEX_TYPE_EOF  0x01
 
-dword_t hexdata_read(word_t* hex_line_buf, int width);
+dword_t hexdata_read(word_t **hex_line_buf, int width);
 word_t* hexfile_load(const char* filename);
 #endif // !__HEXFILE_LOAD_H__

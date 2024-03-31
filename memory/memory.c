@@ -1,11 +1,11 @@
 #include "../include/memory.h"
 #include <string.h>
 
-void memory_init() {
-  memory.code = (word_t)0;
-  memset(memory.iram, 0, MEM_IRAM_SIZE);
-  memset(memory.xram, 0, MEM_XRAM_SIZE);
-  memset(memory.sfr,  0, MEM_SFR_SIZE);
+void memory_init(memory_t *memory) {
+  memory->code = (word_t*)0;
+  memset(memory->iram, 0, MEM_IRAM_SIZE);
+  memset(memory->xram, 0, MEM_XRAM_SIZE);
+  memset(memory->sfr,  0, MEM_SFR_SIZE);
 }
 
 word_t memory_read(addr_t addr, memory_type_t type) {
@@ -22,6 +22,11 @@ word_t memory_read(addr_t addr, memory_type_t type) {
 void memory_write(addr_t addr, word_t data, memory_type_t type) {
   switch (type) {
     case MEM_TYPE_IRAM: iram_write((iaddr_t)addr, data); break;
+    case MEM_TYPE_XRAM: xram_write((xaddr_t)addr, data); break;
+    case MEM_TYPE_CODE: code_write((caddr_t)addr, data); break;
+    case MEM_TYPE_SFR : sfr_write ((iaddr_t)addr, data); break;
+    case MEM_TYPE_BIT : bit_write ((iaddr_t)addr, data); break;
+    default: break;
   }
 }
 
@@ -63,7 +68,7 @@ void sfr_write(iaddr_t addr, word_t data) {
   // switch (addr) {
   //   case SFR_SBUF: uart_write();
   //}
-  addr -= MEM_BIT_IRAM_START;
+  addr -= MEM_BIT_SFR_START;
   if (addr < MEM_SFR_SIZE) memory.sfr[addr] = data;
 }
 

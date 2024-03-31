@@ -1,11 +1,11 @@
 #include "../include/hexfile_load.h"
 #include "../include/memory.h"
-#include <stdio.h>
 
-dword_t hexdata_read(word_t* buf, int width) {
+dword_t hexdata_read(word_t **buf, int width) {
   dword_t hexdata = 0;
   for (int i = 0; i < width; ++i) {
-    char c = buf[i];
+    char c = (*buf)[i];
+    // printf("%c", c);
     if ((c >= '0') && (c <= '9')) {
       hexdata = (hexdata << 4) | (c - '0');
     } else if ((c >= 'a') && (c <= 'f')) {
@@ -14,19 +14,18 @@ dword_t hexdata_read(word_t* buf, int width) {
       hexdata = (hexdata << 4) | (c - 'A') + 10;
     }
   }
-
-  buf += width;
+  *buf += width;
   return hexdata;
 }
 
-word_t* hexfile_load(const char* filename) {
-  FILE* file = fopen(filename, "r");
+word_t *hexfile_load(const char* filename) {
+  FILE *file = fopen(filename, "r");
   if (file == NULL) {
     printf("open file: %s error.\n", filename);
     return NULL;
   }
 
-  word_t* code = (word_t*)malloc(MEM_CODE_SIZE);
+  word_t *code = (word_t *)malloc(MEM_CODE_SIZE);
   if (code == NULL) {
     printf("malloc failed.\n");
     return NULL;
@@ -44,30 +43,45 @@ word_t* hexfile_load(const char* filename) {
 
   char hex_line_buf[HEX_LINE_SIZE];
   while (fgets(hex_line_buf, sizeof(hex_line_buf), file)) {
-    word_t* c = hex_line_buf;
-    if (*c++ != ':') {
+    word_t* buf = hex_line_buf;
+    if (*buf++ != ':') {
       printf("hexfile: %s format error.", filename);
       fclose(file); 
       return NULL;
     }
 
-    word_t len  = hexdata_read(c, 2);
-    addr_t addr = hexdata_read(c, 4);
-    word_t type = hexdata_read(c, 2);
-
+    word_t  len  = hexdata_read(&buf, 2);
+    dword_t addr = hexdata_read(&buf, 4);
+    word_t  type = hexdata_read(&buf, 2);
+    printf("\n%d, %d, %d\n",len, addr, type);
     switch (type) {
       case HEX_TYPE_DATA:
-        for (word_t index = 0; index < len; ++index) {
-          code[addr++] = hexdata_read(c, 2);
+        for (word_t i= 0; i < len; ++i) {
+          dword_t n = hexdata_read(&buf, 2);
+          printf("n = %x  ", n);
+          code[addr++] = n;
         }
+        printf("addr = %d\n", addr);
+        for (word_t i= 0; i < sizeof(code); ++i) {
+          printf("%x ", code[i]);
+        }
+        printf("\n");
         break;
       case HEX_TYPE_EOF:
         fclose(file); return code;
       default:
+        printf("default");
         fclose(file); free(code);
         return NULL;
     }
   }
   fclose(file);
   return code;
+}
+
+int main() {
+  memory.code = hexfile_load("./test/code.hex");
+  for (int i = 0; i < sizeof(memory.code); ++i) {
+    printf("%x ", memory.code[i]);
+  }
 }
