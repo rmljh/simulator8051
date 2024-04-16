@@ -7,3 +7,10 @@ E:\文档\毕业设计\simulator8051\difftest\t18_bit_jb_jc\51.uvproj
 Project File Date:  04/16/2024
 
 <h2>Output:</h2>
+assembling test.a51...
+test.a51 - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+Program Size: data=8.0 xdata=0 code=1580
+creating hex file from ".\Objects\code"...
+".\Objects\code" - 0 Error(s), 0 Warning(s).
