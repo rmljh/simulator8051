@@ -3,113 +3,90 @@
 #include "../include/hexfile_load.h"
 #include <stdio.h>
 
-void difftest() {
-  uint16_t addr = 0x600;
+#define Mr memory_read
+#define Mr2(addr, type) (Mr(addr++, type) << 8) | (Mr(addr++, type))
+
+int difftest() {
+  addr_t addr = 0x600;
   do {
-    uint8_t addr0 = memory_read(addr++, MEM_TYPE_CODE);
-    uint8_t addr1 = memory_read(addr++, MEM_TYPE_CODE);
-    uint8_t data0 = memory_read(addr++, MEM_TYPE_CODE);
-    uint8_t data1 = memory_read(addr++, MEM_TYPE_CODE);
-    uint16_t cmp_addr = (addr0 << 8) | addr1;
-    uint16_t expect_data = (data0 << 8) | data1;
-    uint16_t real_data;
+    dword_t cmp_addr = Mr2(addr, MEM_TYPE_CODE);
+    dword_t exe_data = Mr2(addr, MEM_TYPE_CODE);
+    dword_t rel_data;
 
     switch (cmp_addr) {
-    case REG_SP:
-      real_data = memory_read(SFR_SP, MEM_TYPE_SFR);
-      break;
-    case REG_A:
-      real_data = memory_read(SFR_ACC, MEM_TYPE_SFR);
-      break;
-    case REG_B:
-      real_data = memory_read(SFR_B, MEM_TYPE_SFR);
-      break;
-    case REG_PSW:
-      real_data = memory_read(SFR_PSW, MEM_TYPE_SFR);
-      break;  
-    case REG_PC:
-      real_data = mcu.pc;
-      break;
-    case REG_DPTR:
-      real_data = memory_read(SFR_DPH, MEM_TYPE_SFR) << 8;
-      real_data |= memory_read(SFR_DPL, MEM_TYPE_SFR);
-      break;
-    case CYCLE:
-      real_data = mcu.cycles;
-      break;
-    case REG_R0:
-      real_data = memory_read(0, MEM_TYPE_IRAM);
-      break;
-    case REG_R1:
-      real_data = memory_read(1, MEM_TYPE_IRAM);
-      break;
-    case REG_R2:
-      real_data = memory_read(2, MEM_TYPE_IRAM);
-      break;
-    case REG_R3:
-      real_data = memory_read(3, MEM_TYPE_IRAM);
-      break;
-    case REG_R4:
-      real_data = memory_read(4, MEM_TYPE_IRAM);
-      break;
-    case REG_R5:
-      real_data = memory_read(5, MEM_TYPE_IRAM);
-      break;
-    case REG_R6:
-      real_data = memory_read(6, MEM_TYPE_IRAM);
-      break;
-    case REG_R7:
-      real_data = memory_read(7, MEM_TYPE_IRAM);
-      break;
-    case REG_END:
-      return;
-    default:
-      real_data = memory_read(cmp_addr, MEM_TYPE_IRAM);
-      break;
+      case REG_SP:  rel_data = Mr(MEM_SFR_SP, MEM_TYPE_SFR) ; break;
+      case REG_A:   rel_data = Mr(MEM_SFR_ACC, MEM_TYPE_SFR); break;
+      case REG_B:   rel_data = Mr(MEM_SFR_B, MEM_TYPE_SFR)  ; break;
+      case REG_PSW: rel_data = Mr(MEM_SFR_PSW, MEM_TYPE_SFR); break;  
+      case REG_PC:  rel_data = mcu.pc;  break;
+      case REG_DPTR:
+        rel_data  = Mr(MEM_SFR_DPH, MEM_TYPE_SFR) << 8;
+        rel_data |= Mr(MEM_SFR_DPL, MEM_TYPE_SFR);
+        break;
+      case CYCLE:   rel_data = mcu.cycles; break;
+      case REG_R0:  rel_data = Mr(0, MEM_TYPE_IRAM);  break;
+      case REG_R1:  rel_data = Mr(1, MEM_TYPE_IRAM);  break;
+      case REG_R2:  rel_data = Mr(2, MEM_TYPE_IRAM);  break;
+      case REG_R3:  rel_data = Mr(3, MEM_TYPE_IRAM);  break;
+      case REG_R4:  rel_data = Mr(4, MEM_TYPE_IRAM);  break;
+      case REG_R5:  rel_data = Mr(5, MEM_TYPE_IRAM);  break;
+      case REG_R6:  rel_data = Mr(6, MEM_TYPE_IRAM);  break;
+      case REG_R7:  rel_data = Mr(7, MEM_TYPE_IRAM);  break;
+      case REG_END: return 0;
+      default:  rel_data = Mr(cmp_addr, MEM_TYPE_IRAM); break;
     }  
-    if (real_data != expect_data) {
-      printf("test error: addr=%x, real=%x, expect=%x\n", cmp_addr, real_data, expect_data);
-    } else {
-      printf("success!\n");
+
+    if (rel_data != exe_data) {
+      printf("test error: addr=%x, rel=%x, expect=%x\n", cmp_addr, rel_data, exe_data);
+      // return 1;
     }
   } while (1);
 }
 
 
-int main() {
-  mcu_init(&mcu);
-  memory.code = hexfile_load("./test/code.hex");
-  for (int i = 0; i < sizeof(memory.code); ++i) {
-    printf("%x ", memory.code[i]);
-  }
-  // word_t code[] = { 0x78, 0x89, 0xa8, 0x91 };
-  // memory_write(0x91, 0x05, MEM_TYPE_IRAM);
-  // memory.code = code; 
-  int pc;
-  while(mcu.pc != sizeof(memory.code)) {
-    pc = mcu.pc;
-    inst_exec_once(&inst_encode);
-    printf("%d\n", mcu.pc);
-  } 
-  difftest();
-}
+static const char * file_name[] = {
+  "./difftest/t1_simple/Objects/code.hex",
+  "./difftest/t2_move_0/Objects/code.hex",
+  "./difftest/t2_move_1/Objects/code.hex",
+  "./difftest/t2_move_2/Objects/code.hex",
+  "./difftest/t2_move_3/Objects/code.hex",
+  "./difftest/t3_movc_0/Objects/code.hex",
+  "./difftest/t4_movx_0/Objects/code.hex",  
+  "./difftest/t5_push_pop/Objects/code.hex",
+  "./difftest/t6_xch/Objects/code.hex",
+  "./difftest/t7_anl/Objects/code.hex",
+  "./difftest/t8_orl/Objects/code.hex",
+  "./difftest/t9_xrl/Objects/code.hex",
+  "./difftest/t10_cpl_rr_rl/Objects/code.hex",
+  "./difftest/t11_add_0/Objects/code.hex", 
+  "./difftest/t11_add_1/Objects/code.hex",
+  "./difftest/t12_inc/Objects/code.hex",
+  "./difftest/t13_dec/Objects/code.hex",
+  "./difftest/t14_subb_0/Objects/code.hex",
+  "./difftest/t14_subb_1/Objects/code.hex",
+  "./difftest/t15_mul_div_da/Objects/code.hex",
+  "./difftest/t16_jmp_call_ret/Objects/code.hex",
+  "./difftest/t17_djnz_jz_cjne/Objects/code.hex",
+  "./difftest/t18_bit_jb_jc/Objects/code.hex",
+};
 
-// int main() {
-//   // inst_encode.inst_byte0 = 0x78;
-//   // inst_encode.inst_byte1 = 0x89;
-//   // inst_encode.inst_byte2 = 0x00;
-//   // decode_exec(inst_encode);
-//   // word_t data = Mr(0x00, MEM_TYPE_IRAM);
-//   // printf("%d", data);
-//   word_t code[] = { 0x78, 0x89, 0xa8, 0x91 };
-//   Mw(0x91, 0x05, MEM_TYPE_IRAM);
-//   memory.code = code; 
-//   while (mcu.pc != 4) {
-//     inst_fetch(&inst_encode, 3);
-//     printf("%d, %d, %d\n", inst_encode.inst_byte0, inst_encode.inst_byte1, inst_encode.inst_byte2);
-//     decode_exec(&inst_encode);
-//     word_t data = Mr(0x00, MEM_TYPE_IRAM);
-//     printf("%d\n", data);
-//     printf("%d\n", mcu.pc);
-//   }
-// }
+
+int main() {
+  for (int i = 0; i < sizeof(file_name) / sizeof(const char *); ++i) {
+    dword_t pc = -1;
+    word_t *code;
+    printf("begin test: %s\n", file_name[i]);
+    mcu_init(&mcu);
+    code = hexfile_load(file_name[i]);
+    if (code == NULL) {
+      printf("load hex file failed: %s", file_name[i]);
+      exit(-1);
+    }
+    memory.code = code;
+    while(mcu.pc != pc) {
+      pc = mcu.pc;
+      inst_exec_once(&inst_encode);
+    } 
+    difftest();
+  } 
+}

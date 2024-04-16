@@ -6,6 +6,7 @@ void memory_init(memory_t *memory) {
   memset(memory->iram, 0, MEM_IRAM_SIZE);
   memset(memory->xram, 0, MEM_XRAM_SIZE);
   memset(memory->sfr,  0, MEM_SFR_SIZE);
+  memory_write(MEM_SFR_SP, 0x07, MEM_TYPE_SFR);
 }
 
 word_t memory_read(addr_t addr, memory_type_t type) {
@@ -33,7 +34,7 @@ void memory_write(addr_t addr, word_t data, memory_type_t type) {
 
 word_t bit_read (word_t addr) {
   word_t bit_index = addr % 8;
-  if (addr > MEM_BIT_SFR_START) {
+  if (addr >= MEM_BIT_SFR_START) {
     word_t byte_index = (addr - MEM_BIT_SFR_START) / 8 * 8;
     return memory.sfr[byte_index]  & (1 << bit_index) ? 1 : 0;
   } else {
@@ -45,7 +46,7 @@ word_t bit_read (word_t addr) {
 void bit_write(word_t addr, word_t bit) {
   word_t bit_index = addr % 8;
   bit &= 0x01;
-  if (addr > MEM_BIT_SFR_START) {
+  if (addr >= MEM_BIT_SFR_START) {
     word_t byte_index = (addr - MEM_BIT_SFR_START) / 8 * 8;
     memory.sfr[byte_index] &= ~(1 << bit_index);
     memory.sfr[byte_index] |= bit ? (1 << bit_index) : 0;

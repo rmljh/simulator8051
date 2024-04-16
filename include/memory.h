@@ -11,32 +11,31 @@
 #define MEM_BIT_IRAM_START 0x20
 #define MEM_BIT_SFR_START	 0x80
 
+#define MEM_SFR_ACC       0xE0
+#define MEM_SFR_SP				0x81
+#define MEM_SFR_B				  0xF0
+#define MEM_SFR_DPH				0x83
+#define MEM_SFR_DPL				0x82
+#define MEM_SFR_PSW				0xD0
+#define MEM_SFR_PSW_CY		(0xD0 + 7)
+#define MEM_SFR_PSW_AC		(0xD0 + 6)
+#define MEM_SFR_PSW_OV		(0xD0 + 2)
+#define MEM_SFR_PSW_P			(0xD0 + 0)
 
-#define SFR_ACC       0xE0
-#define SFR_SP				0x81
-#define SFR_B				  0xF0
-#define SFR_DPH				0x83
-#define SFR_DPL				0x82
-#define SFR_PSW				0xD0
-#define SFR_PSW_CY		(0xD0 + 7)
-#define SFR_PSW_AC		(0xD0 + 6)
-#define SFR_PSW_OV		(0xD0 + 2)
-#define SFR_PSW_P			(0xD0 + 0)
+#define MEM_SFR_SBUF			0x99
+#define MEM_SFR_SCON			0x98
+#define MEM_SFR_SCON_TI		(0x98 + 1)
+#define MEM_SFR_SCON_RI		(0x98 + 0)
 
-#define SFR_SBUF			0x99
-#define SFR_SCON			0x98
-#define SFR_SCON_TI		(0x98 + 1)
-#define SFR_SCON_RI		(0x98 + 0)
+#define MEM_SFR_TCON			0x88
+#define	SFR_TCON_TR0  	  (0x88 + 4)
+#define MEM_SFR_TCON_TF0  (0x88 + 5)
 
-#define SFR_TCON			0x88
-#define	SFR_TCON_TR0	(0x88 + 4)
-#define SFR_TCON_TF0	(0x88 + 5)
+#define MEM_SFR_TMOD			0x89
+#define MEM_SFR_TH0				0x8C
+#define MEM_SFR_TL0				0x8A
 
-#define SFR_TMOD			0x89
-#define SFR_TH0				0x8C
-#define SFR_TL0				0x8A
-
-#define SFR_IE				0xA8
+#define MEM_SFR_IE				0xA8
 
 typedef enum _memory_type_t {
   MEM_TYPE_IRAM,      // not include bit addressable memory

@@ -53,19 +53,12 @@ word_t *hexfile_load(const char* filename) {
     word_t  len  = hexdata_read(&buf, 2);
     dword_t addr = hexdata_read(&buf, 4);
     word_t  type = hexdata_read(&buf, 2);
-    printf("\n%d, %d, %d\n",len, addr, type);
+    // printf("\n%d, %d, %d\n",len, addr, type);
     switch (type) {
       case HEX_TYPE_DATA:
         for (word_t i= 0; i < len; ++i) {
-          dword_t n = hexdata_read(&buf, 2);
-          printf("n = %x  ", n);
-          code[addr++] = n;
+          code[addr++] = hexdata_read(&buf, 2);
         }
-        printf("addr = %d\n", addr);
-        for (word_t i= 0; i < sizeof(code); ++i) {
-          printf("%x ", code[i]);
-        }
-        printf("\n");
         break;
       case HEX_TYPE_EOF:
         fclose(file); return code;
@@ -79,9 +72,9 @@ word_t *hexfile_load(const char* filename) {
   return code;
 }
 
-int main() {
-  memory.code = hexfile_load("./test/code.hex");
-  for (int i = 0; i < sizeof(memory.code); ++i) {
-    printf("%x ", memory.code[i]);
-  }
-}
+// int main() {
+//   memory.code = hexfile_load("./test/code.hex");
+//   for (int i = 0; i < 1660; ++i) {
+//     printf("%x ", memory.code[i]);
+//   }
+// }

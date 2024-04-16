@@ -1,0 +1,129 @@
+A51 MACRO ASSEMBLER  TEST                                                                 09/16/2022 15:41:16 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\test.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE test.a51 SET(SMALL) DEBUG PRINT(.\Listings\test.lst) OBJECT(.\Objects\t
+                      est.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1             org 0x0
+0000                   2     start:
+                       3             ; MOV direct,#data
+0000 901234            4             MOV DPTR, #0x1234
+                       5             
+                       6             ; prepare
+0003 7820              7             MOV R0, #0x20    ; R0 = 0x20
+0005 752011            8             MOV 0x20, #0x11  ; (0x20) = 0x11
+0008 7930              9             MOV R1, #0x30    ; R1 = 0x30
+                      10             
+                      11             ; MOV A,@Ri， MOV direct,@Ri
+000A E6               12             MOV A, @R0              ; a = 0x11
+000B 8621             13             MOV 0x21, @R0   ; (0x21) = A = 0x11
+                      14             
+                      15             ; MOV @Ri,A
+000D F7               16             MOV @R1, A              ; (0x30) = 0x11
+                      17     
+                      18             ; MOV @Ri,direct
+000E 7931             19             MOV R1, #0x31
+0010 A720             20             MOV @R1, 0x20   ; (0x31) = (0x20)
+                      21     
+                      22             ; MOV @Ri,#data
+0012 7932             23             MOV R1, #0x32
+0014 7778             24             MOV @R1, #0x78  ; (0x32) = 0x78
+                      25             
+                      26             ; MOV C,bit, MOV bit,C
+0016 75D080           27             MOV PSW, #0x80          ; C = 0x1
+0019 9200             28             MOV 0x0, C
+001B A8D0             29             MOV R0, PSW                     ; R0 = 0x80
+001D 75D000           30             MOV PSW, #0x00          ; C = 0x1
+0020 A200             31             MOV C, 0x0
+0022 A9D0             32             MOV R1, PSW                     ; R1 = 0x00
+                      33             
+0024 80FE             34             sjmp $
+                      35             
+                      36     ; for test
+  1000                37     REG_SP          EQU     0x1000
+  1001                38     REG_A           EQU     0x1001
+  1002                39     REG_B           EQU     0x1002
+  1003                40     REG_PSW         EQU     0x1003
+  1004                41     REG_PC          EQU     0x1004
+  1005                42     REG_DPTR        EQU     0x1005
+  1006                43     CYCLE           EQU 0x1006
+  2000                44     REG_R0          EQU     0x2000
+  2001                45     REG_R1          EQU     0x2001
+  2002                46     REG_R2          EQU     0x2002
+  2003                47     REG_R3          EQU     0x2003
+  2004                48     REG_R4          EQU     0x2004
+  2005                49     REG_R5          EQU     0x2005
+  2006                50     REG_R6          EQU     0x2006
+  2007                51     REG_R7          EQU     0x2007
+  2FFF                52     REG_END         EQU     0x2FFF
+0600                  53             org 0x600
+0600 0020             54             dW  0x20,               0x11
+0602 0011                    
+0604 0021             55             dW  0x21,               0x11
+0606 0011                    
+A51 MACRO ASSEMBLER  TEST                                                                 09/16/2022 15:41:16 PAGE     2
+
+                      56     
+0608 0030             57             dW  0x30,               0x11
+060A 0011                    
+060C 0031             58             dW  0x31,               0x11
+060E 0011                    
+0610 0032             59             dW  0x32,               0x78
+0612 0078                    
+                      60     
+0614 1000             61             dW  REG_SP,             0x7
+0616 0007                    
+0618 1001             62             dW  REG_A,              0x11
+061A 0011                    
+061C 1002             63             dW  REG_B,              0x0
+061E 0000                    
+0620 1004             64             dW  REG_PC,             0x24
+0622 0024                    
+0624 1005             65             dw  REG_DPTR,   0x1234
+0626 1234                    
+0628 1006             66             dw      CYCLE,          28
+062A 001C                    
+062C 2000             67             dW  REG_R0,             0x80
+062E 0080                    
+0630 2001             68             dW  REG_R1,             0x80
+0632 0080                    
+                      69                     
+0634 2FFF             70             dw  REG_END,    0
+0636 0000                    
+                      71             end             
+A51 MACRO ASSEMBLER  TEST                                                                 09/16/2022 15:41:16 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+CYCLE. . . . . . .  N NUMB   1006H   A   
+PSW. . . . . . . .  D ADDR   00D0H   A   
+REG_A. . . . . . .  N NUMB   1001H   A   
+REG_B. . . . . . .  N NUMB   1002H   A   
+REG_DPTR . . . . .  N NUMB   1005H   A   
+REG_END. . . . . .  N NUMB   2FFFH   A   
+REG_PC . . . . . .  N NUMB   1004H   A   
+REG_PSW. . . . . .  N NUMB   1003H   A   
+REG_R0 . . . . . .  N NUMB   2000H   A   
+REG_R1 . . . . . .  N NUMB   2001H   A   
+REG_R2 . . . . . .  N NUMB   2002H   A   
+REG_R3 . . . . . .  N NUMB   2003H   A   
+REG_R4 . . . . . .  N NUMB   2004H   A   
+REG_R5 . . . . . .  N NUMB   2005H   A   
+REG_R6 . . . . . .  N NUMB   2006H   A   
+REG_R7 . . . . . .  N NUMB   2007H   A   
+REG_SP . . . . . .  N NUMB   1000H   A   
+START. . . . . . .  C ADDR   0000H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

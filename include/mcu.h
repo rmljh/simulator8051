@@ -4,8 +4,9 @@
 #include "memory.h"
 typedef struct _8051mcu_t {
   memory_t *mem;
-  addr_t   pc;
-  int      cycles;
+  dword_t   pc;
+  int       cycles;
+  int       interrupt;
 } mcu_t;
 
 mcu_t mcu;

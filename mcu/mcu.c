@@ -5,4 +5,5 @@ void mcu_init(mcu_t *mcu) {
   mcu->mem = &memory;
   mcu->pc  = 0;
   mcu->cycles = 0;
+  mcu->interrupt = 0;
 } 

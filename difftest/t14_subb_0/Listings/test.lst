@@ -1,0 +1,150 @@
+A51 MACRO ASSEMBLER  TEST                                                                 09/13/2022 09:48:42 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\test.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE test.a51 SET(SMALL) DEBUG PRINT(.\Listings\test.lst) OBJECT(.\Objects\t
+                      est.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1             org 0x0
+0000                   2     start:
+                       3             ; no ac, cy, ov
+0000 75D000            4             MOV PSW, #0x0
+0003 7436              5             MOV A, #0x36
+0005 9412              6             SUBB A, #0x12
+0007 85D020            7             MOV 0x20, PSW
+000A F521              8             MOV 0x21, A
+                       9             
+                      10             ;cy
+000C 75D080           11             MOV PSW, #0x80
+000F 7456             12             MOV A, #0x56
+0011 94E2             13             SUBB A, #0xE2
+0013 85D022           14             MOV 0x22, PSW
+0016 F523             15             MOV 0x23, A
+                      16     
+                      17             ;ac
+0018 75D080           18             MOV PSW, #0x80
+001B 7432             19             MOV A, #0x32
+001D 942E             20             SUBB A, #0x2E
+001F 85D024           21             MOV 0x24, PSW
+0022 F525             22             MOV 0x25, A
+                      23     
+                      24             ;ov, bit6->bit7
+0024 75D080           25             MOV PSW, #0x80
+0027 74C8             26             MOV A, #0xC8
+0029 9473             27             SUBB A, #0x73
+002B 85D026           28             MOV 0x26, PSW
+002E F527             29             MOV 0x27, A
+                      30                     
+                      31             ;ov+cy, bit7->bit8
+0030 75D080           32             MOV PSW, #0x80
+0033 7470             33             MOV A, #0x70
+0035 94F0             34             SUBB A, #0xF0
+0037 85D028           35             MOV 0x28, PSW
+003A F529             36             MOV 0x29, A
+                      37     
+                      38             ;ov, cy, ac
+003C 75D080           39             MOV PSW, #0x80
+003F 7450             40             MOV A, #0x50
+0041 94C4             41             SUBB A, #0xc4
+0043 85D02A           42             MOV 0x2A, PSW
+0046 F52B             43             MOV 0x2B, A
+0048 80FE             44             sjmp $
+                      45     
+                      46     ; for test
+  1000                47     REG_SP          EQU     0x1000
+  1001                48     REG_A           EQU     0x1001
+  1002                49     REG_B           EQU     0x1002
+  1003                50     REG_PSW         EQU     0x1003
+  1004                51     REG_PC          EQU     0x1004
+  1005                52     REG_DPTR        EQU     0x1005
+  1006                53     CYCLE           EQU 0x1006
+  2000                54     REG_R0          EQU     0x2000
+  2001                55     REG_R1          EQU     0x2001
+  2002                56     REG_R2          EQU     0x2002
+  2003                57     REG_R3          EQU     0x2003
+A51 MACRO ASSEMBLER  TEST                                                                 09/13/2022 09:48:42 PAGE     2
+
+  2004                58     REG_R4          EQU     0x2004
+  2005                59     REG_R5          EQU     0x2005
+  2006                60     REG_R6          EQU     0x2006
+  2007                61     REG_R7          EQU     0x2007
+  2FFF                62     REG_END         EQU     0x2FFF
+0600                  63             org 0x600
+0600 1000             64             dW  REG_SP,             0x7
+0602 0007                    
+0604 1001             65             dW  REG_A,              0x8b
+0606 008B                    
+0608 1002             66             dW  REG_B,              0x0
+060A 0000                    
+060C 1003             67             dW  REG_PSW,    0xc4
+060E 00C4                    
+0610 1004             68             dW  REG_PC,             0x48
+0612 0048                    
+0614 1005             69             dw  REG_DPTR,   0x00
+0616 0000                    
+0618 1006             70             dw      CYCLE,          44
+061A 002C                    
+                      71     
+061C 0020             72             dw  0x20,               0x00
+061E 0000                    
+0620 0021             73             dw  0x21,               0x24
+0622 0024                    
+0624 0022             74             dw  0x22,               0x81
+0626 0081                    
+0628 0023             75             dw  0x23,               0x73
+062A 0073                    
+062C 0024             76             dw  0x24,               0x40
+062E 0040                    
+0630 0025             77             dw  0x25,               0x03
+0632 0003                    
+0634 0026             78             dw  0x26,               0x05
+0636 0005                    
+0638 0027             79             dw  0x27,               0x54
+063A 0054                    
+063C 0028             80             dw  0x28,               0xc1
+063E 00C1                    
+0640 0029             81             dw  0x29,               0x7f
+0642 007F                    
+0644 002A             82             dw  0x2A,               0xc4
+0646 00C4                    
+0648 002B             83             dw  0x2B,               0x8b
+064A 008B                    
+                      84     
+064C 2FFF             85             dw  REG_END,    0
+064E 0000                    
+                      86             end             
+A51 MACRO ASSEMBLER  TEST                                                                 09/13/2022 09:48:42 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+CYCLE. . . . . . .  N NUMB   1006H   A   
+PSW. . . . . . . .  D ADDR   00D0H   A   
+REG_A. . . . . . .  N NUMB   1001H   A   
+REG_B. . . . . . .  N NUMB   1002H   A   
+REG_DPTR . . . . .  N NUMB   1005H   A   
+REG_END. . . . . .  N NUMB   2FFFH   A   
+REG_PC . . . . . .  N NUMB   1004H   A   
+REG_PSW. . . . . .  N NUMB   1003H   A   
+REG_R0 . . . . . .  N NUMB   2000H   A   
+REG_R1 . . . . . .  N NUMB   2001H   A   
+REG_R2 . . . . . .  N NUMB   2002H   A   
+REG_R3 . . . . . .  N NUMB   2003H   A   
+REG_R4 . . . . . .  N NUMB   2004H   A   
+REG_R5 . . . . . .  N NUMB   2005H   A   
+REG_R6 . . . . . .  N NUMB   2006H   A   
+REG_R7 . . . . . .  N NUMB   2007H   A   
+REG_SP . . . . . .  N NUMB   1000H   A   
+START. . . . . . .  C ADDR   0000H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

@@ -1,0 +1,172 @@
+A51 MACRO ASSEMBLER  TEST                                                                 04/16/2024 21:17:30 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.02b
+OBJECT MODULE PLACED IN .\Objects\test.obj
+ASSEMBLER INVOKED BY: D:\Keil\Keil_v4\C51\BIN\A51.EXE test.a51 SET(SMALL) DEBUG PRINT(.\Listings\test.lst) OBJECT(.\Obje
+                      cts\test.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1             org 0x0
+0000                   2     start:
+0000 752000            3             MOV 0x20, #0
+0003 752100            4             MOV 0x21, #0
+0006 752200            5             MOV 0x22, #0
+                       6             
+0009 D200              7             SETB 0x0                ; SETB BIT
+000B D3                8             SETB C                  ; SETB C
+000C 9201              9             MOV 0x1, C              ; MOV bit, C
+                      10             
+000E C3               11             CLR C                   ; CLRC
+000F 9202             12             MOV 0x2, C              
+                      13             
+0011 B3               14             CPL C                   ; cpl c
+0012 9203             15             MOV 0x3, C
+                      16             
+0014 9204             17             MOV 0x4, C
+0016 C204             18             CLR 0x4                 ; CLR bit
+                      19             
+0018 9205             20             MOV 0x5, C
+001A B205             21             CPL 0x5                 ; cpl bit       
+                      22             
+001C D206             23             SETB 0x6        
+001E A206             24             MOV C, 0x6              ; mov c, bit
+0020 9207             25             MOV 0x7, C
+                      26             
+                      27             ;logic ANL
+0022 D240             28             SETB 0x40
+0024 D3               29             SETB C
+0025 8240             30             ANL C, 0x40             ; ANL C,bit
+0027 9208             31             MOV 0x8, C
+                      32     
+0029 B040             33             ANL C, /0x40    ; ANL C,/bit
+002B 9209             34             MOV 0x9, C
+                      35     
+                      36             ;logic ORL
+002D D240             37             SETB 0x40
+002F D3               38             SETB C
+0030 7240             39             ORL C, 0x40             ; ORL C,bit
+0032 9210             40             MOV 0x10, C
+                      41     
+0034 A040             42             ORL C, /0x40    ; ORL C,/bit
+0036 9211             43             MOV 0x11, C
+                      44             
+                      45             ; JC/JNC
+0038 D3               46             SETB C
+0039 5004             47             JNC next0
+003B 4002             48             JC next0
+003D 80FE             49             SJMP $
+003F                  50     next0:
+003F C3               51             CLR C
+0040 4004             52             JC next1
+0042 5002             53             JNC next1
+0044 80FE             54             SJMP $
+0046                  55     next1:
+                      56     
+                      57             ; JB/JNB
+A51 MACRO ASSEMBLER  TEST                                                                 04/16/2024 21:17:30 PAGE     2
+
+0046 D240             58             SETB 0x40
+0048 304005           59             JNB 0x40, next2
+004B 204002           60             JB 0x40, next2
+004E 80FE             61             SJMP $
+0050                  62     next2:
+0050 C3               63             CLR C
+0051 204005           64             JB 0x40, next3
+0054 304002           65             JNB 0x40, next3
+0057 80FE             66             SJMP $
+0059                  67     next3:
+                      68     
+                      69             ; JBC
+0059 C240             70             CLR 0x40
+005B D241             71             SETB 0x41
+005D 104005           72             JBC 0x40, next4
+0060 104104           73             JBC 0x41, next5
+0063 80FE             74             SJMP $
+0065                  75     next4:
+0065 80FE             76             SJMP $
+0067                  77     next5:
+0067 9212             78             MOV 0x12, C
+0069 80FE             79             SJMP $
+                      80     
+                      81     ; for test
+  1000                82     REG_SP          EQU     0x1000
+  1001                83     REG_A           EQU     0x1001
+  1002                84     REG_B           EQU     0x1002
+  1003                85     REG_PSW         EQU     0x1003
+  1004                86     REG_PC          EQU     0x1004
+  1005                87     REG_DPTR        EQU     0x1005
+  1006                88     CYCLE           EQU 0x1006
+  2000                89     REG_R0          EQU     0x2000
+  2001                90     REG_R1          EQU     0x2001
+  2002                91     REG_R2          EQU     0x2002
+  2003                92     REG_R3          EQU     0x2003
+  2004                93     REG_R4          EQU     0x2004
+  2005                94     REG_R5          EQU     0x2005
+  2006                95     REG_R6          EQU     0x2006
+  2007                96     REG_R7          EQU     0x2007
+  2FFF                97     REG_END         EQU     0x2FFF
+0600                  98             org 0x600
+0600 0020             99             dw  0x20,               0xCB
+0602 00CB                    
+0604 0021            100             dw  0x21,               0x01
+0606 0001                    
+0608 0022            101             dw  0x22,               0x03
+060A 0003                    
+                     102     
+060C 1000            103             dW  REG_SP,             0x7
+060E 0007                    
+0610 1001            104             dW  REG_A,              0x00
+0612 0000                    
+0614 1002            105             dW  REG_B,              0x00
+0616 0000                    
+0618 1003            106             dW  REG_PSW,    0x00
+061A 0000                    
+061C 1004            107             dW  REG_PC,             0x69
+061E 0069                    
+0620 1005            108             dw  REG_DPTR,   0x00
+0622 0000                    
+0624 1006            109             dw      CYCLE,          74
+0626 004A                    
+                     110     
+0628 2FFF            111             dw  REG_END,    0
+062A 0000                    
+                     112             end             
+A51 MACRO ASSEMBLER  TEST                                                                 04/16/2024 21:17:30 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+CYCLE. . . . . . .  N NUMB   1006H   A   
+NEXT0. . . . . . .  C ADDR   003FH   A   
+NEXT1. . . . . . .  C ADDR   0046H   A   
+NEXT2. . . . . . .  C ADDR   0050H   A   
+NEXT3. . . . . . .  C ADDR   0059H   A   
+NEXT4. . . . . . .  C ADDR   0065H   A   
+NEXT5. . . . . . .  C ADDR   0067H   A   
+REG_A. . . . . . .  N NUMB   1001H   A   
+REG_B. . . . . . .  N NUMB   1002H   A   
+REG_DPTR . . . . .  N NUMB   1005H   A   
+REG_END. . . . . .  N NUMB   2FFFH   A   
+REG_PC . . . . . .  N NUMB   1004H   A   
+REG_PSW. . . . . .  N NUMB   1003H   A   
+REG_R0 . . . . . .  N NUMB   2000H   A   
+REG_R1 . . . . . .  N NUMB   2001H   A   
+REG_R2 . . . . . .  N NUMB   2002H   A   
+REG_R3 . . . . . .  N NUMB   2003H   A   
+REG_R4 . . . . . .  N NUMB   2004H   A   
+REG_R5 . . . . . .  N NUMB   2005H   A   
+REG_R6 . . . . . .  N NUMB   2006H   A   
+REG_R7 . . . . . .  N NUMB   2007H   A   
+REG_SP . . . . . .  N NUMB   1000H   A   
+START. . . . . . .  C ADDR   0000H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

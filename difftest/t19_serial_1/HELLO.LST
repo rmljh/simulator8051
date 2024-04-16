@@ -1,0 +1,64 @@
+C51 COMPILER V9.60.0.0   HELLO                                                             09/22/2022 15:53:14 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE HELLO
+OBJECT MODULE PLACED IN .\Objects\HELLO.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE HELLO.C OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND OBJECT(.\Objects\HEL
+                    -LO.obj)
+
+line level    source
+
+   1          #include <REG52.H> 
+   2          #include <stdio.h> 
+   3          #include <string.h>
+   4          
+   5          void uart_write (char c) {
+   6   1          SBUF=c;
+   7   1          while(TI == 0);
+   8   1          TI=0;
+   9   1      }
+  10          
+  11          char uart_read() {
+  12   1          char c;
+  13   1      
+  14   1          while(RI==0);
+  15   1          c = SBUF;
+  16   1          RI=0; 
+  17   1      
+  18   1          return c;
+  19   1      }
+  20          
+  21          void main (void) {
+  22   1              int count = 0;
+  23   1      
+  24   1              SCON  = 0x50;                   /* SCON: mode 1, 8-bit UART, enable rcvr      */
+  25   1              TMOD |= 0x20;               /* TMOD: timer 1, mode 2, 8-bit reload        */
+  26   1              TH1   = 221;                /* TH1:  reload value for 1200 baud @ 16MHz   */
+  27   1              TR1   = 1;                  /* TR1:  timer 1 run                          */
+  28   1      
+  29   1          count = SBUF;
+  30   1          while (1) {
+  31   2                      char c = uart_read();
+  32   2                      uart_write(c);
+  33   2      
+  34   2                      if (c == '\r') {
+  35   3                              uart_write('\n');
+  36   3                      }
+  37   2        }
+  38   1      }
+  39          
+  40          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     53    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

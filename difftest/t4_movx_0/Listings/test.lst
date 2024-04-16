@@ -1,0 +1,110 @@
+A51 MACRO ASSEMBLER  TEST                                                                 09/19/2022 10:11:49 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\test.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE test.a51 SET(SMALL) DEBUG PRINT(.\Listings\test.lst) OBJECT(.\Objects\t
+                      est.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1             org 0x0
+0000                   2     start:
+                       3             ;MOVX @Ri,A
+0000 7820              4             MOV R0, #0x20
+0002 7412              5             MOV A, #0x12
+0004 F2                6             MOVX @R0, A  ;(0x20) = 0x12
+                       7     
+                       8             ; MOVX A,@Ri
+0005 7400              9             MOV A, #0
+0007 E2               10             MOVX A, @R0  ;A = 0x12
+0008 F520             11             MOV 0x20, A
+                      12     
+                      13             ; MOVX @DPTR,A
+000A 900030           14             MOV DPTR, #0x30
+000D 7423             15             MOV A, #0x23
+000F F0               16             MOVX @DPTR, A  ;(0x30) = 0x23
+                      17     
+                      18             ; MOVX A,@DPTR
+0010 7400             19             MOV A, #0
+0012 E0               20             MOVX A, @DPTR  ;A = 0x23
+0013 F521             21             MOV 0x21, A
+0015 80FE             22             sjmp $
+0017                  23     table:
+0017 12               24             DB  0x12
+0018 13               25             DB  0x13
+                      26     
+                      27             
+                      28     ; for test
+  1000                29     REG_SP          EQU     0x1000
+  1001                30     REG_A           EQU     0x1001
+  1002                31     REG_B           EQU     0x1002
+  1003                32     REG_PSW         EQU     0x1003
+  1004                33     REG_PC          EQU     0x1004
+  1005                34     REG_DPTR        EQU     0x1005
+  1006                35     CYCLE           EQU 0x1006
+  2000                36     REG_R0          EQU     0x2000
+  2001                37     REG_R1          EQU     0x2001
+  2002                38     REG_R2          EQU     0x2002
+  2003                39     REG_R3          EQU     0x2003
+  2004                40     REG_R4          EQU     0x2004
+  2005                41     REG_R5          EQU     0x2005
+  2006                42     REG_R6          EQU     0x2006
+  2007                43     REG_R7          EQU     0x2007
+  2FFF                44     REG_END         EQU     0x2FFF
+0600                  45             org 0x600
+0600 0020             46             dw  0x20, 0x12
+0602 0012                    
+0604 0021             47             dw  0x21, 0x23
+0606 0023                    
+                      48     
+0608 1000             49             dW  REG_SP,             0x7
+060A 0007                    
+060C 1001             50             dW  REG_A,              0x23
+060E 0023                    
+0610 1002             51             dW  REG_B,              0x0
+0612 0000                    
+0614 1004             52             dW  REG_PC,             0x15
+A51 MACRO ASSEMBLER  TEST                                                                 09/19/2022 10:11:49 PAGE     2
+
+0616 0015                    
+0618 1005             53             dw  REG_DPTR,   0x30
+061A 0030                    
+061C 1006             54             dw  CYCLE,              19
+061E 0013                    
+                      55             
+0620 2FFF             56             dw  REG_END,    0
+0622 0000                    
+                      57             end             
+A51 MACRO ASSEMBLER  TEST                                                                 09/19/2022 10:11:49 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+CYCLE. . . . . . .  N NUMB   1006H   A   
+REG_A. . . . . . .  N NUMB   1001H   A   
+REG_B. . . . . . .  N NUMB   1002H   A   
+REG_DPTR . . . . .  N NUMB   1005H   A   
+REG_END. . . . . .  N NUMB   2FFFH   A   
+REG_PC . . . . . .  N NUMB   1004H   A   
+REG_PSW. . . . . .  N NUMB   1003H   A   
+REG_R0 . . . . . .  N NUMB   2000H   A   
+REG_R1 . . . . . .  N NUMB   2001H   A   
+REG_R2 . . . . . .  N NUMB   2002H   A   
+REG_R3 . . . . . .  N NUMB   2003H   A   
+REG_R4 . . . . . .  N NUMB   2004H   A   
+REG_R5 . . . . . .  N NUMB   2005H   A   
+REG_R6 . . . . . .  N NUMB   2006H   A   
+REG_R7 . . . . . .  N NUMB   2007H   A   
+REG_SP . . . . . .  N NUMB   1000H   A   
+START. . . . . . .  C ADDR   0000H   A   
+TABLE. . . . . . .  C ADDR   0017H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

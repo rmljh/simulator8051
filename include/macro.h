@@ -30,6 +30,8 @@
 #define panic(msg) do { fprintf(stderr, "Panic: %s\n", msg); exit(EXIT_FAILURE); } while(0)
 #define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1)
 
+
+// test
 #define REG_SP		(dword_t)0x1000
 #define REG_A 	 	(dword_t)0x1001
 #define REG_B		 	(dword_t)0x1002

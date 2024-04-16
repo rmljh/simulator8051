@@ -71,15 +71,15 @@ typedef enum _op_addr_mode_t {
 
   OP_ADDR_MODE_IND_RI,
   OP_ADDR_MODE_IND_A_PC,
-  OP_ADDR_MODE_IND_A_DPTR,
+  OP_ADDR_MODE_IND_A_DP,
   OP_ADDR_MODE_IND_DPTR,
   OP_ADDR_MODE_IND_SP,
 
   OP_ADDR_MODE_REG_RN,
   OP_ADDR_MODE_REG_ACC,
-  OP_ADDR_MODE_REG_B,
+  OP_ADDR_MODE_REG_BR,
   OP_ADDR_MODE_REG_C,
-  OP_ADDR_MODE_REG_DPTR,
+  OP_ADDR_MODE_REG_DP,
 
   OP_ADDR_MODE_BIT,
 } op_addr_mode_t;
@@ -92,7 +92,7 @@ typedef struct _inst_info_t {
   const char* mnemonic;
 } inst_info_t;
 
-void decode_operand(inst_encode_t *inst_encode, word_t *op0, word_t *op1, 
+void decode_operand(inst_encode_t *inst_encode, dword_t *op0, dword_t *op1, 
   dword_t bytes, dword_t cycles, op_addr_mode_t op0_mode, op_addr_mode_t op1_mode);
 
 void inst_fetch(inst_encode_t *inst_encode, int len);
