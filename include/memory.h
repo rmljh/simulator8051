@@ -74,4 +74,6 @@ void   xram_write(xaddr_t addr, word_t data);
 word_t code_read (caddr_t addr);
 void   code_write(caddr_t addr, word_t data);
 
+void uart_write(word_t data);
+
 #endif // !__MEMORY_H__

@@ -58,17 +58,18 @@ void bit_write(word_t addr, word_t bit) {
 }
 
 word_t sfr_read(iaddr_t addr) {
-  // switch (addr) {
-  //   case SFR_SBUF: return uart_read();
-  //}
+  // if (addr == MEM_SFR_SBUF) {
+  //   uart_read(addr);
+  // }
   addr -= MEM_BIT_SFR_START;
   return (addr < MEM_SFR_SIZE) ? memory.sfr[addr] : 0;
 }
 
 void sfr_write(iaddr_t addr, word_t data) {
-  // switch (addr) {
-  //   case SFR_SBUF: uart_write();
-  //}
+  if (addr == MEM_SFR_SBUF) {
+    uart_write(data);
+    memory_write(MEM_SFR_SCON_TI, 1, MEM_TYPE_BIT);
+  }
   addr -= MEM_BIT_SFR_START;
   if (addr < MEM_SFR_SIZE) memory.sfr[addr] = data;
 }

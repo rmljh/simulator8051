@@ -11,6 +11,7 @@ typedef struct _8051mcu_t {
 
 mcu_t mcu;
 
-void mcu_init(mcu_t *mcu);
+void mcu_init (mcu_t* mcu);
+void mcu_reset(mcu_t* mcu);
 
 #endif // !__CPU_H__

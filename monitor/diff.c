@@ -45,31 +45,36 @@ int difftest() {
 
 
 static const char * file_name[] = {
-  "./difftest/t1_simple/Objects/code.hex",
-  "./difftest/t2_move_0/Objects/code.hex",
-  "./difftest/t2_move_1/Objects/code.hex",
-  "./difftest/t2_move_2/Objects/code.hex",
-  "./difftest/t2_move_3/Objects/code.hex",
-  "./difftest/t3_movc_0/Objects/code.hex",
-  "./difftest/t4_movx_0/Objects/code.hex",  
-  "./difftest/t5_push_pop/Objects/code.hex",
-  "./difftest/t6_xch/Objects/code.hex",
-  "./difftest/t7_anl/Objects/code.hex",
-  "./difftest/t8_orl/Objects/code.hex",
-  "./difftest/t9_xrl/Objects/code.hex",
-  "./difftest/t10_cpl_rr_rl/Objects/code.hex",
-  "./difftest/t11_add_0/Objects/code.hex", 
-  "./difftest/t11_add_1/Objects/code.hex",
-  "./difftest/t12_inc/Objects/code.hex",
-  "./difftest/t13_dec/Objects/code.hex",
-  "./difftest/t14_subb_0/Objects/code.hex",
-  "./difftest/t14_subb_1/Objects/code.hex",
-  "./difftest/t15_mul_div_da/Objects/code.hex",
-  "./difftest/t16_jmp_call_ret/Objects/code.hex",
-  "./difftest/t17_djnz_jz_cjne/Objects/code.hex",
-  "./difftest/t18_bit_jb_jc/Objects/code.hex",
+  // "./difftest/t1_simple/Objects/code.hex",
+  // "./difftest/t2_move_0/Objects/code.hex",
+  // "./difftest/t2_move_1/Objects/code.hex",
+  // "./difftest/t2_move_2/Objects/code.hex",
+  // "./difftest/t2_move_3/Objects/code.hex",
+  // "./difftest/t3_movc_0/Objects/code.hex",
+  // "./difftest/t4_movx_0/Objects/code.hex",  
+  // "./difftest/t5_push_pop/Objects/code.hex",
+  // "./difftest/t6_xch/Objects/code.hex",
+  // "./difftest/t7_anl/Objects/code.hex",
+  // "./difftest/t8_orl/Objects/code.hex",
+  // "./difftest/t9_xrl/Objects/code.hex",
+  // "./difftest/t10_cpl_rr_rl/Objects/code.hex",
+  // "./difftest/t11_add_0/Objects/code.hex", 
+  // "./difftest/t11_add_1/Objects/code.hex",
+  // "./difftest/t12_inc/Objects/code.hex",
+  // "./difftest/t13_dec/Objects/code.hex",
+  // "./difftest/t14_subb_0/Objects/code.hex",
+  // "./difftest/t14_subb_1/Objects/code.hex",
+  // "./difftest/t15_mul_div_da/Objects/code.hex",
+  // "./difftest/t16_jmp_call_ret/Objects/code.hex",
+  // "./difftest/t17_djnz_jz_cjne/Objects/code.hex",
+  // "./difftest/t18_bit_jb_jc/Objects/code.hex",
+  "./difftest/t19_serial_0/Objects/code.hex",
 };
 
+void uart_write(word_t data) {
+  // putchar(data);
+  // printf("pc = %x\n", mcu.pc);
+}
 
 int main() {
   for (int i = 0; i < sizeof(file_name) / sizeof(const char *); ++i) {
@@ -83,10 +88,25 @@ int main() {
       exit(-1);
     }
     memory.code = code;
-    while(mcu.pc != pc) {
-      pc = mcu.pc;
+    // while(mcu.pc != pc) {
+    //   pc = mcu.pc;
+    //   inst_exec_once(&inst_encode);
+    // } 
+    // difftest();
+    while(1) {
       inst_exec_once(&inst_encode);
-    } 
-    difftest();
+      if (mcu.pc >= 0x438 && mcu.pc <= 0x455) {
+        // printf("pc = %x\n", mcu.pc);
+        // if (mcu.pc == 0x44d) {
+        //   printf("0x08-09 = %d%d\n", memory_read(0x08, MEM_TYPE_IRAM), memory_read(0x09, MEM_TYPE_IRAM));
+        // }
+        
+      }
+      if (mcu.pc == 0x476) {
+        printf("0x0c = %x\n", memory_read(0x0c,        MEM_TYPE_IRAM));
+        printf("cr   = %x\n", memory_read(memory_read(0x0c, MEM_TYPE_IRAM), MEM_TYPE_IRAM));
+        printf("acc  = %x\n", memory_read(MEM_SFR_ACC, MEM_TYPE_IRAM));
+      }
+    }
   } 
 }
