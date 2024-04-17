@@ -2,39 +2,38 @@
 #include <stdio.h> 
 #include <string.h>
 
-void uart_write (char c) {
-    SBUF=c;
-    while(TI == 0);
-    TI=0;
+void uart_init(void) {
+    SCON = 0x50;           // 8-bit variable baud rate; receiver enabled
+    TMOD |= 0x20;          // Timer1 mode 2, 8-bit auto-reload
+    TH1 = 0xFD;            // 9600 baud rate with 11.0592MHz oscillator
+    TR1 = 1;               // Start timer1
+    TI = 1;                // Clear transmit interrupt flag
+    RI = 0;                // Clear receive interrupt flag
 }
 
-char uart_read() {
-    char c;
-
-    while(RI==0);
-    c = SBUF;
-    RI=0; 
-
-    return c;
+void uart_write(char c) {
+    SBUF = c;
+    while(TI == 0);        // Wait for transmission to complete
+    TI = 0;                // Clear transmission interrupt flag
 }
 
-void main (void) {
-	int count = 0;
+char uart_read(void) {
+    while(RI == 0);        // Wait until character received
+    RI = 0;                // Clear receive interrupt flag
+    return SBUF;           // Return character from serial buffer
+}
 
-	SCON  = 0x50;		        /* SCON: mode 1, 8-bit UART, enable rcvr      */
-	TMOD |= 0x20;               /* TMOD: timer 1, mode 2, 8-bit reload        */
-	TH1   = 221;                /* TH1:  reload value for 1200 baud @ 16MHz   */
-	TR1   = 1;                  /* TR1:  timer 1 run                          */
+void main(void) {
+    uart_init();           // Initialize UART settings
 
-    count = SBUF;
     while (1) {
-		char c = uart_read();
-		uart_write(c);
+        char c = uart_read(); // Read character
+        uart_write(c);     // Echo character back
 
-		if (c == '\r') {
-			uart_write('\n');
-		}
-  }
+        if (c == '\r') {
+            uart_write('\n'); // If carriage return, also send new line
+        }
+    }
 }
 
 

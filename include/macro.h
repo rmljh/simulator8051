@@ -13,6 +13,7 @@
 #define iaddr_t uint8_t
 #define xaddr_t uint16_t
 #define caddr_t uint16_t
+#define bool    uint8_t
 
 // memory
 #define MEM_CODE_SIZE 65536
@@ -60,5 +61,10 @@
 #define concat3(x, y, z) concat(concat(x, y), z)
 #define concat4(x, y, z, w) concat3(concat(x, y), z, w)
 #define concat5(x, y, z, v, w) concat4(concat(x, y), z, v, w)
+
+#define Mr memory_read
+#define Mw memory_write
+#define Mr2(addr, type) (Mr(addr++, type) << 8) | (Mr(addr++, type))
+
 
 #endif // !__MACRO_H__

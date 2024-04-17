@@ -58,9 +58,9 @@ void bit_write(word_t addr, word_t bit) {
 }
 
 word_t sfr_read(iaddr_t addr) {
-  // if (addr == MEM_SFR_SBUF) {
-  //   uart_read(addr);
-  // }
+  if (addr == MEM_SFR_SBUF) {
+    return uart_read();
+  }
   addr -= MEM_BIT_SFR_START;
   return (addr < MEM_SFR_SIZE) ? memory.sfr[addr] : 0;
 }

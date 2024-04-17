@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        04/17/2024  00:50:29  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        04/17/2024  13:16:20  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -40,11 +40,11 @@ LINK MAP OF MODULE:  .\Objects\code (HELLO)
             CODE    0000H     0003H     ABSOLUTE     
             CODE    0003H     035CH     UNIT         ?PR?PRINTF?PRINTF
             CODE    035FH     00BAH     UNIT         ?C?LIB_CODE
-            CODE    0419H     004AH     UNIT         ?PR?MAIN?HELLO
-            CODE    0463H     0028H     UNIT         ?PR?_SEND_MSG?HELLO
-            CODE    048BH     0027H     UNIT         ?PR?PUTCHAR?PUTCHAR
-            CODE    04B2H     000CH     UNIT         ?C_C51STARTUP
-            CODE    04BEH     000AH     UNIT         ?CO?HELLO
+            CODE    0419H     004BH     UNIT         ?PR?MAIN?HELLO
+            CODE    0464H     002EH     UNIT         ?PR?_SEND_MSG?HELLO
+            CODE    0492H     0027H     UNIT         ?PR?PUTCHAR?PUTCHAR
+            CODE    04B9H     0012H     UNIT         ?CO?HELLO
+            CODE    04CBH     000CH     UNIT         ?C_C51STARTUP
 
 
 
@@ -59,7 +59,7 @@ SEGMENT                           BIT_GROUP          DATA_GROUP
 
 ?PR?MAIN?HELLO                 -----    -----      0008H    0002H
   +--> ?CO?HELLO
-BL51 BANKED LINKER/LOCATER V6.22                                                      04/17/2024  00:50:29  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      04/17/2024  13:16:20  PAGE 2
 
 
   +--> ?PR?PRINTF?PRINTF
@@ -91,19 +91,21 @@ SYMBOL TABLE OF MODULE:  .\Objects\code (HELLO)
   D:0088H         PUBLIC        TCON
   D:0022H         SYMBOL        msg
   D:008DH         PUBLIC        TH1
-  C:0463H         PUBLIC        _send_msg
+  C:046AH         PUBLIC        _send_msg
   B:0088H.6       PUBLIC        TR1
   D:00C8H         PUBLIC        T2CON
   D:00D0H         PUBLIC        PSW
+  -------         PROC          L?0010
+  -------         ENDPROC       L?0010
   -------         PROC          _SEND_MSG
   D:000AH         SYMBOL        msg
-  C:0463H         LINE#         7
-  C:0469H         LINE#         8
-  C:0474H         LINE#         9
-  C:0483H         LINE#         10
-  C:0486H         LINE#         11
-  C:0488H         LINE#         12
-  C:048AH         LINE#         13
+  C:046AH         LINE#         7
+  C:0470H         LINE#         8
+  C:047BH         LINE#         9
+  C:048AH         LINE#         10
+  C:048DH         LINE#         11
+  C:048FH         LINE#         12
+  C:0491H         LINE#         13
   -------         ENDPROC       _SEND_MSG
   -------         PROC          MAIN
   -------         DO            
@@ -117,12 +119,14 @@ SYMBOL TABLE OF MODULE:  .\Objects\code (HELLO)
   C:0427H         LINE#         21
   C:0429H         LINE#         23
   C:0429H         LINE#         24
+BL51 BANKED LINKER/LOCATER V6.22                                                      04/17/2024  13:16:20  PAGE 3
+
+
   C:0438H         LINE#         25
-  C:0458H         LINE#         27
-BL51 BANKED LINKER/LOCATER V6.22                                                      04/17/2024  00:50:29  PAGE 3
-
-
-  C:0461H         LINE#         28
+  C:044AH         LINE#         27
+  C:044DH         LINE#         28
+  C:045FH         LINE#         30
+  C:0462H         LINE#         31
   -------         ENDPROC       MAIN
   -------         ENDMOD        HELLO
 
@@ -162,8 +166,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\code (HELLO)
   -------         ENDMOD        ?C?CCASE
 
   -------         MODULE        PUTCHAR
-  C:048BH         PUBLIC        _PUTCHAR
+  C:0492H         PUBLIC        _PUTCHAR
   -------         ENDMOD        PUTCHAR
 
-Program Size: data=48.1 xdata=0 code=1224
+Program Size: data=48.1 xdata=0 code=1239
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define Mr memory_read
-#define Mw memory_write
 
 // #define Rs()  do { rs = SEXT(BITS(Mr(SFR_PSW, MEM_TYPE_IRAM), 4, 3) << 3, 8); } while(0)
 // #define Rn()  do { rn = SEXT(BITS(opcode, 2, 0), 8); } while(0)
@@ -70,15 +68,13 @@ static void Call(inst_encode_t *inst_encode, char Type) {
 
 #define Ret()   do { word_t sp = Sr(MEM_SFR_SP); mcu.pc = Ir(sp--) << 8 | Ir(sp--); Mw(MEM_SFR_SP, sp, MEM_TYPE_SFR); } while(0)
 
-#define PSW_P() \
-  do { \
-    word_t count = 0; word_t acc = Ir(MEM_SFR_ACC); \
-    for (word_t i = 0; i < 8; ++i) { \
-      if (acc & (1 << i)) count ^= 1; \
-    } \
-    Mw(MEM_SFR_PSW_P, count, MEM_TYPE_BIT); \
-  } while(0) 
-
+void psw_p_update()  { 
+  word_t count = 0; word_t acc = Ir(MEM_SFR_ACC); 
+  for (word_t i = 0; i < 8; ++i) { 
+    if (acc & (1 << i)) count ^= 1; 
+  } 
+  Mw(MEM_SFR_PSW_P, count, MEM_TYPE_BIT); 
+} 
 
 
 void decode_operand(inst_encode_t *inst_encode, dword_t *op0, dword_t *op1, 
@@ -134,7 +130,7 @@ void decode_exec(inst_encode_t *inst_encode) {
 #define INSTPAT_INST(inst_encode) (inst_encode->inst_byte0)
 #define INSTPAT_MATCH(inst_encode, bytes, cycles, name, op0_mode, op1_mode,  ... ) {  \
   decode_operand(inst_encode, &op0, &op1, bytes, cycles, concat(OP_ADDR_MODE_, op0_mode), concat(OP_ADDR_MODE_, op1_mode)); \
-  PSW_P(); \
+  psw_p_update(); timer_update(cycles); \
   __VA_ARGS__ ; \
 }
   INSTPAT_START();
@@ -182,7 +178,7 @@ void decode_exec(inst_encode_t *inst_encode) {
   INSTPAT("0101 0010", 2, 1, ANL  direct  A         , DIRECT  , REG_ACC , Mw(op0, (Ir(op0) & op1)    , MEM_TYPE_IRAM));
   INSTPAT("0101 0011", 3, 2, ANL  direct  #data     , DIRECT  , IMM_8   , Mw(op0, (Ir(op0) & op1)    , MEM_TYPE_IRAM));
   INSTPAT("1000 0010", 2, 2, ANL  C       bit       , REG_C   , BIT     , Mw(op0, (Br(op0) &  Br(op1)), MEM_TYPE_BIT));
-  INSTPAT("1011 0000", 2, 2, ANL  C       ~bit      , REG_C   , BIT     , Mw(op0, (Br(op0) & ~Br(op1)), MEM_TYPE_BIT));
+  INSTPAT("1011 0000", 2, 2, ANL  C       ~bit      , REG_C   , BIT     , Mw(op0, (Br(op0) & !Br(op1)), MEM_TYPE_BIT));
 
   INSTPAT("0100 1???", 1, 1, ORL  A       Rn        , REG_ACC , REG_RN  , Mw(op0, (Ir(op0) | Ir(op1)), MEM_TYPE_IRAM));
   INSTPAT("0100 0101", 2, 1, ORL  A       direct    , REG_ACC , DIRECT  , Mw(op0, (Ir(op0) | Ir(op1)), MEM_TYPE_IRAM));
@@ -191,7 +187,7 @@ void decode_exec(inst_encode_t *inst_encode) {
   INSTPAT("0100 0010", 2, 1, ORL  direct  A         , DIRECT  , REG_ACC , Mw(op0, (Ir(op0) | op1)    , MEM_TYPE_IRAM));
   INSTPAT("0100 0011", 3, 2, ORL  direct  #data     , DIRECT  , IMM_8   , Mw(op0, (Ir(op0) | op1)    , MEM_TYPE_IRAM));
   INSTPAT("0111 0010", 2, 2, ORL  C       bit       , REG_C   , BIT     , Mw(op0, (Br(op0) |  Br(op1)), MEM_TYPE_BIT));
-  INSTPAT("1010 0000", 2, 2, ORL  C       ~bit      , REG_C   , BIT     , Mw(op0, (Br(op0) | ~Br(op1)), MEM_TYPE_BIT));
+  INSTPAT("1010 0000", 2, 2, ORL  C       ~bit      , REG_C   , BIT     , Mw(op0, (Br(op0) | !Br(op1)), MEM_TYPE_BIT));
 
   INSTPAT("0110 1???", 1, 1, XRL  A       Rn        , REG_ACC , REG_RN  , Mw(op0, (Ir(op0) ^ Ir(op1)), MEM_TYPE_IRAM));
   INSTPAT("0110 0101", 2, 1, XRL  A       direct    , REG_ACC , DIRECT  , Mw(op0, (Ir(op0) ^ Ir(op1)), MEM_TYPE_IRAM));
@@ -246,7 +242,7 @@ void decode_exec(inst_encode_t *inst_encode) {
   INSTPAT("???1 0001", 2, 2, ACALL  addr11          , NONE    , NONE    , Call(inst_encode, 'A'));
   INSTPAT("0001 0010", 3, 2, LCALL  addr16          , NONE    , NONE    , Call(inst_encode, 'L'));
   INSTPAT("0010 0010", 1, 2, RET                    , NONE    , NONE    , Ret());
-  INSTPAT("0011 0010", 1, 2, RETI                   , NONE    , NONE    , Ret(); mcu.interrupt = 0);
+  INSTPAT("0011 0010", 1, 2, RETI                   , NONE    , NONE    , Ret(); mcu.in_interrupt = 0);
 
   INSTPAT("???0 0001", 2, 2, AJMP addr11            , NONE    , NONE    , mcu.pc = BITS(mcu.pc, 15, 11) << 11 | (BITS(opcode, 7, 5) << 8) | ibyte1);
   INSTPAT("1000 0000", 2, 2, SJMP rel               , NONE    , NONE    , mcu.pc += (int8_t)inst_encode->inst_byte1);

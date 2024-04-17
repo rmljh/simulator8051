@@ -5,6 +5,7 @@
     "array": "c",
     "string": "c",
     "string_view": "c",
-    "algorithm": "c"
+    "algorithm": "c",
+    "HELLO.C": "cpp"
   }
 }

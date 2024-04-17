@@ -28,7 +28,7 @@
 #define MEM_SFR_SCON_RI		(0x98 + 0)
 
 #define MEM_SFR_TCON			0x88
-#define	SFR_TCON_TR0  	  (0x88 + 4)
+#define	MEM_SFR_TCON_TR0  (0x88 + 4)
 #define MEM_SFR_TCON_TF0  (0x88 + 5)
 
 #define MEM_SFR_TMOD			0x89
@@ -36,6 +36,8 @@
 #define MEM_SFR_TL0				0x8A
 
 #define MEM_SFR_IE				0xA8
+
+#define INT_TIMER0_ENTRY  0x0B
 
 typedef enum _memory_type_t {
   MEM_TYPE_IRAM,      // not include bit addressable memory
@@ -74,6 +76,7 @@ void   xram_write(xaddr_t addr, word_t data);
 word_t code_read (caddr_t addr);
 void   code_write(caddr_t addr, word_t data);
 
-void uart_write(word_t data);
+word_t uart_read();
+void   uart_write(word_t data);
 
 #endif // !__MEMORY_H__

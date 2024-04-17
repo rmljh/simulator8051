@@ -3,8 +3,6 @@
 #include "../include/hexfile_load.h"
 #include <stdio.h>
 
-#define Mr memory_read
-#define Mr2(addr, type) (Mr(addr++, type) << 8) | (Mr(addr++, type))
 
 int difftest() {
   addr_t addr = 0x600;
@@ -68,12 +66,25 @@ static const char * file_name[] = {
   // "./difftest/t16_jmp_call_ret/Objects/code.hex",
   // "./difftest/t17_djnz_jz_cjne/Objects/code.hex",
   // "./difftest/t18_bit_jb_jc/Objects/code.hex",
-  "./difftest/t19_serial_0/Objects/code.hex",
+  // "./difftest/t19_serial_0/Objects/code.hex",
+  // "./difftest/t19_serial_1/Objects/code.hex",
+  // "./difftest/t20_timer/Objects/code.hex",
+  // "./difftest/t21_int/Objects/code.hex",
+  "./difftest/demo.hex",
 };
 
+#include <conio.h>
+word_t uart_read() {
+  return _kbhit() ? _getch() : 0;
+}
+
 void uart_write(word_t data) {
-  // putchar(data);
+  putchar(data);
   // printf("pc = %x\n", mcu.pc);
+}
+
+int uart_rx_ready() {
+  return _kbhit();
 }
 
 int main() {
@@ -95,17 +106,9 @@ int main() {
     // difftest();
     while(1) {
       inst_exec_once(&inst_encode);
-      if (mcu.pc >= 0x438 && mcu.pc <= 0x455) {
-        // printf("pc = %x\n", mcu.pc);
-        // if (mcu.pc == 0x44d) {
-        //   printf("0x08-09 = %d%d\n", memory_read(0x08, MEM_TYPE_IRAM), memory_read(0x09, MEM_TYPE_IRAM));
-        // }
-        
-      }
-      if (mcu.pc == 0x476) {
-        printf("0x0c = %x\n", memory_read(0x0c,        MEM_TYPE_IRAM));
-        printf("cr   = %x\n", memory_read(memory_read(0x0c, MEM_TYPE_IRAM), MEM_TYPE_IRAM));
-        printf("acc  = %x\n", memory_read(MEM_SFR_ACC, MEM_TYPE_IRAM));
+      interrupt_controller();
+      if (uart_rx_ready()) {
+        memory_write(MEM_SFR_SCON_RI, 1, MEM_TYPE_BIT);
       }
     }
   } 

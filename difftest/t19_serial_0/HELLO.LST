@@ -1,4 +1,4 @@
-C51 COMPILER V9.51   HELLO                                                                 04/17/2024 00:50:29 PAGE 1   
+C51 COMPILER V9.51   HELLO                                                                 04/17/2024 13:16:19 PAGE 1   
 
 
 C51 COMPILER V9.51, COMPILATION OF MODULE HELLO
@@ -32,18 +32,21 @@ line level    source
   22   1      
   23   1          while (1) {
   24   2              memset(msg, 0, sizeof(msg));
-  25   2              sprintf (msg, "Hello %d\n", count++); 
+  25   2              sprintf (msg, "Hello 0\n"); 
   26   2              
   27   2              send_msg(msg);
-  28   2          }
-  29   1      }
-  30          
-  31          
+  28   2              sprintf (msg, "Hello 1\n"); 
+  29   2              
+  30   2              send_msg(msg);
+  31   2          }
+  32   1      }
+  33          
+  34          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    114    ----
-   CONSTANT SIZE    =     10    ----
+   CODE SIZE        =    121    ----
+   CONSTANT SIZE    =     18    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =     16       5

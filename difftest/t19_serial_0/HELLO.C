@@ -22,7 +22,10 @@ void main (void) {
 
     while (1) {
         memset(msg, 0, sizeof(msg));
-        sprintf (msg, "Hello %d\n", count++); 
+        sprintf (msg, "Hello 0\n"); 
+        
+        send_msg(msg);
+				sprintf (msg, "Hello 1\n"); 
         
         send_msg(msg);
     }
