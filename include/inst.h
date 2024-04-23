@@ -4,7 +4,7 @@
 #include "mcu.h"
 #include <assert.h>
 
-// --- pattern matching mechanism ---
+// pattern matching mechanism
 __attribute__((always_inline))
 static inline void pattern_decode(const char *str, int len,
     dword_t *key, dword_t *mask, dword_t *shift) {
@@ -30,7 +30,7 @@ finish:
   *shift = __shift;
 }
 
-// --- pattern matching wrappers for decode ---
+// pattern matching wrappers for decode 
 #define INSTPAT(pattern, ...) do { \
   dword_t key, mask, shift; \
   pattern_decode(pattern, STRLEN(pattern), &key, &mask, &shift); \
@@ -39,24 +39,26 @@ finish:
   } \
 } while(0)
 
-#define INSTPAT_START(name) { const void ** __instpat_end = &&concat(__instpat_end_, name);
+#define INSTPAT_START(name) { const void ** __instpat_end = && concat(__instpat_end_, name);
 #define INSTPAT_END(name)   concat(__instpat_end_, name): ; }
 
+// an encoded instruction obtained directly from memory
 typedef struct _inst_encode_t {
   word_t inst_byte0;
   word_t inst_byte1;
   word_t inst_byte2;
 } inst_encode_t;
 
-inst_encode_t inst_encode;
+extern inst_encode_t inst_encode;
 
+// an decoded instruction from decode operations
 typedef struct _inst_decode_t {
   word_t opcode;
-  word_t op0;
-  word_t op1;
+  word_t or0;
+  word_t or1;
 } inst_decode_t;
 
-inst_decode_t inst_decode;
+extern inst_decode_t inst_decode;
 
 // Addressing modes:  Immediate addressing, Direct addressing, Indirect addressing
 // Register addressing, Inherent addressing, Indexed addressing, Bit addressing

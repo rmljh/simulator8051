@@ -11,11 +11,14 @@
 #define MEM_BIT_IRAM_START 0x20
 #define MEM_BIT_SFR_START	 0x80
 
+// define the SFR registers' address
 #define MEM_SFR_ACC       0xE0
 #define MEM_SFR_SP				0x81
 #define MEM_SFR_B				  0xF0
+
 #define MEM_SFR_DPH				0x83
 #define MEM_SFR_DPL				0x82
+
 #define MEM_SFR_PSW				0xD0
 #define MEM_SFR_PSW_CY		(0xD0 + 7)
 #define MEM_SFR_PSW_AC		(0xD0 + 6)
@@ -31,14 +34,17 @@
 #define	MEM_SFR_TCON_TR0  (0x88 + 4)
 #define MEM_SFR_TCON_TF0  (0x88 + 5)
 
-#define MEM_SFR_TMOD			0x89
-#define MEM_SFR_TH0				0x8C
-#define MEM_SFR_TL0				0x8A
+#define MEM_SFR_TMOD			0x89        // timer mode
+#define MEM_SFR_TH0				0x8C        // timer high0
+#define MEM_SFR_TL0				0x8A        // timer low 0
+#define MEM_SFR_TH1       0x8D        // timer high1
+#define MEM_SFR_TL1       0x8B        // timer low 1
 
 #define MEM_SFR_IE				0xA8
 
 #define INT_TIMER0_ENTRY  0x0B
 
+// enum the type of memory: IRAM, XRAM, CODE
 typedef enum _memory_type_t {
   MEM_TYPE_IRAM,      // not include bit addressable memory
   MEM_TYPE_XRAM,
@@ -47,6 +53,7 @@ typedef enum _memory_type_t {
   MEM_TYPE_SFR,       // not include bit addressable memory
 } memory_type_t;
 
+// simulates the memory of STC-B
 typedef struct _memory_t {
   word_t* code;
   word_t iram[MEM_IRAM_SIZE];
@@ -54,10 +61,9 @@ typedef struct _memory_t {
   word_t sfr[MEM_SFR_SIZE];
 } memory_t;
 
-memory_t memory;
+extern memory_t memory;
 
 void   memory_init(memory_t *memory);
-
 word_t memory_read(addr_t addr, memory_type_t type);
 void   memory_write(addr_t addr, word_t data, memory_type_t type);
 
@@ -78,5 +84,6 @@ void   code_write(caddr_t addr, word_t data);
 
 word_t uart_read();
 void   uart_write(word_t data);
+int    uart_rx_ready();
 
 #endif // !__MEMORY_H__

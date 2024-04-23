@@ -3,14 +3,14 @@
 <pre>
 <h1>礦ision Build Log</h1>
 <h2>Project:</h2>
-E:\文档\毕业设计\simulator8051\difftest\t21_int\Hello.uvproj
-Project File Date:  09/13/2022
+E:\simulator8051\difftest\t21_int\Hello.uvproj
+Project File Date:  04/17/2024
 
 <h2>Output:</h2>
 compiling HELLO.C...
 HELLO.C - 0 Error(s), 0 Warning(s).
 Build target 'Simulator'
 linking...
-Program Size: data=60.1 xdata=0 code=1334
+Program Size: data=42.0 xdata=0 code=464
 creating hex file from ".\Objects\code"...
 ".\Objects\code" - 0 Error(s), 0 Warning(s).

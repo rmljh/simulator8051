@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 // conmon
 #define word_t  uint8_t
@@ -13,7 +14,6 @@
 #define iaddr_t uint8_t
 #define xaddr_t uint16_t
 #define caddr_t uint16_t
-#define bool    uint8_t
 
 // memory
 #define MEM_CODE_SIZE 65536
@@ -24,6 +24,9 @@
 #define MEM_BIT_IRAM_START 0x20
 #define MEM_BIT_SFR_START	 0x80
 
+// BITMASK: generate a bitmask with the specified number of bits
+// BITS   : extracts bits from a value
+// SEXT   : signed-extends a value to the specified length 
 #define BITMASK(bits) ((1 << (bits)) - 1)
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1))
 #define SEXT(x, len) ({ struct { int8_t n : len; } __x = { .n = x }; (uint8_t)__x.n; })

@@ -2,6 +2,8 @@
 #define __CPU_H__
 
 #include "memory.h"
+
+// simulates the mcu of STC-B
 typedef struct _8051mcu_t {
   memory_t *mem;
   dword_t   pc;
@@ -9,12 +11,13 @@ typedef struct _8051mcu_t {
   bool      in_interrupt;
 } mcu_t;
 
-mcu_t mcu;
+extern mcu_t mcu;
 
 void mcu_init (mcu_t* mcu);
 void mcu_reset(mcu_t* mcu);
 
+// simulates relevant peripherals: timer, interrupt ...
 void timer_update(int cycles);
 void interrupt_controller();
-void interrupt_enter(addr_t entry);
+void interrupt_entry(addr_t entry);
 #endif // !__CPU_H__

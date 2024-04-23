@@ -12,7 +12,16 @@ void send_msg (char * msg) {
 
 static char msg[16];
 
-
+static void message(int count) {
+	msg[0] = 'H';
+	msg[1] = 'e';
+	msg[2] = 'l';
+	msg[3] = 'l';
+	msg[4] = 'o';
+	msg[5] = ' ';
+	msg[6] = (count % 10) + '0';
+	msg[7] = '\n';
+}
 void main (void) {
 	int count = 0;
 
@@ -26,13 +35,13 @@ void main (void) {
 	TH0   = 0x10;
 	TR0   = 1;
 
-    while (1) {
+  while (1) {
     while (!TF0) {}
     TF0 = 0;
     TL0   = 0x10; 
     TH0   = 0x10;
 		
-    sprintf (msg, "Hello %d\n", count++); 
+    message(count++); 
 		send_msg(msg);
   }
 }
