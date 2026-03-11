@@ -1,19 +1,19 @@
 #include "../include/mcu.h"
-#include <conio.h>
+// #include <conio.h>
 
 mcu_t mcu;
 
 word_t uart_read() {
-  return _kbhit() ? _getch() : 0;
+  // return _kbhit() ? _getch() : 0;
 }
 
 void uart_write(word_t data) {
-  putchar(data);
+  // putchar(data);
   // printf("pc = %x\n", mcu.pc);
 }
 
 int uart_rx_ready() {
-  return _kbhit();
+  // return _kbhit();
 }
 
 void mcu_reset(mcu_t* mcu) {

@@ -3,7 +3,6 @@
 #include "../include/hexfile_load.h"
 #include <stdio.h>
 
-
 int difftest() {
   addr_t addr = 0x600;
   do {
@@ -86,9 +85,16 @@ int main() {
       exit(-1);
     }
     memory.code = code;
+    // Open the file for writing
+    FILE *file = fopen("assembly.txt", "a");
+    if (file == NULL) {
+      perror("Error opening file");
+    }
     while(mcu.pc != pc) {
       pc = mcu.pc;
       inst_exec_once(&inst_encode);
+      // printf("assembly = %s\n", assembly);
+      fprintf(file, "%s\n", assembly);
     } 
     difftest();
     // while(1) {

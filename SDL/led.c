@@ -1,34 +1,18 @@
-#include <SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include "../include/inst.h"
-#include "../include/memory.h"
-#include "../include/hexfile_load.h"
-
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 200
-
-#define LED_WIDTH 40
-#define LED_HEIGHT 40
-#define LED_COUNT 8
-#define LED_GAP 20
-#define LED_X_START 100
-#define LED_Y 80
+#include "led.h"
 
 // Function to update the LEDs based on the input mask
 void updateLEDs(SDL_Renderer* renderer, word_t ledMask) {
     for (int i = 0; i < LED_COUNT; i++) {
         SDL_Rect ledRect = {LED_X_START + i * (LED_WIDTH + LED_GAP), LED_Y, LED_WIDTH, LED_HEIGHT};
         if (ledMask & (1 << (LED_COUNT - 1 - i))) {
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // Green for active LED
+            SDL_SetRenderDrawColor(renderer, 0, 130, 255, 255); // Green for active LED
         } else {
-            SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255); // Gray for inactive LEDs
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Gray for inactive LEDs
         }
         SDL_RenderFillRect(renderer, &ledRect);
     }
 }
-
+/*
 int main(int argc, char* argv[]) {
     char* filename = "../difftest/demo.hex";
     word_t* code;
@@ -99,4 +83,4 @@ int main(int argc, char* argv[]) {
     SDL_Quit();
 
     return EXIT_SUCCESS;
-}
+}*/

@@ -4,7 +4,6 @@
 memory_t memory;
 
 void memory_init(memory_t *memory) {
-  memory->code = (word_t*)0;
   memset(memory->iram, 0, MEM_IRAM_SIZE);
   memset(memory->xram, 0, MEM_XRAM_SIZE);
   memset(memory->sfr,  0, MEM_SFR_SIZE);

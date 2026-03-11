@@ -101,4 +101,6 @@ void inst_fetch(inst_encode_t *inst_encode, int len);
 void decode_exec(inst_encode_t *inst_encode);
 void inst_exec_once(inst_encode_t* inst_encode);
 
+extern char* assembly;
+
 #endif // !__INST_H__

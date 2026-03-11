@@ -6,6 +6,7 @@
 
 inst_encode_t inst_encode;
 inst_decode_t inst_decode;
+char* assembly = NULL;
 
 // #define Rs()  do { rs = SEXT(BITS(Mr(SFR_PSW, MEM_TYPE_IRAM), 4, 3) << 3, 8); } while(0)
 // #define Rn()  do { rn = SEXT(BITS(opcode, 2, 0), 8); } while(0)
@@ -220,6 +221,7 @@ void decode_operand(inst_encode_t *inst_encode, dword_t *op0, dword_t *op1,
     case OP_ADDR_MODE_NONE: break;
   }
   // printf("op0 = %x, op1 = %x\n", *op0, *op1);
+  // sprintf(assembly, "%03X", 0);
   mcu.pc += bytes; mcu.cycles += cycles;
 }
 
@@ -232,6 +234,7 @@ void decode_exec(inst_encode_t *inst_encode) {
 #define INSTPAT_MATCH(inst_encode, bytes, cycles, name, op0_mode, op1_mode,  ... ) {  \
   decode_operand(inst_encode, &op0, &op1, bytes, cycles, concat(OP_ADDR_MODE_, op0_mode), concat(OP_ADDR_MODE_, op1_mode)); \
   psw_p_update(); timer_update(cycles); \
+  assembly = #name; \
   __VA_ARGS__ ; \
 }
   INSTPAT_START();

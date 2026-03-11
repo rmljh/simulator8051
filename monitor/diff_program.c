@@ -29,7 +29,7 @@ int difftest() {
       case REG_R4:  rel_data = Mr(4, MEM_TYPE_IRAM);  break;
       case REG_R5:  rel_data = Mr(5, MEM_TYPE_IRAM);  break;
       case REG_R6:  rel_data = Mr(6, MEM_TYPE_IRAM);  break;
-      case REG_R7:  rel_data = Mr(7, MEM_TYPE_IRAM);  break;
+      case REG_R7:  rel_data = Mr(7, MEM_ATYPE_IRAM);  break;
       case REG_END: return 0;
       default:  rel_data = Mr(cmp_addr, MEM_TYPE_IRAM); break;
     }  
@@ -76,7 +76,6 @@ static const char * file_name[] = {
 
 int main() {
   for (int i = 0; i < sizeof(file_name) / sizeof(const char *); ++i) {
-    dword_t pc = -1;
     word_t *code;
     printf("begin test: %s\n", file_name[i]);
     mcu_init(&mcu);
